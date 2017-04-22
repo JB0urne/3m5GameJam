@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitController : MonoBehaviour {
     
 	private Rigidbody2D rb2d;       //Store a reference to the Rigidbody2D component required to use 2D Physics.
+    private CircleCollider2D collider;
     public float speed = 10.0F;				//Floating point variable to store the player's movement speed.
     public float moveVertical;
     
@@ -14,48 +15,78 @@ public class UnitController : MonoBehaviour {
     void Start ()
     {
         rb2d = GetComponent<Rigidbody2D>();
+        collider = GetComponent<CircleCollider2D>();
 
     }
 	
 	// Update is called once per frame
 	void Update () {
     }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        //Vector3 vCollObj = new Vector2(collision.transform.position.x, collision.transform.position.y - collision.transform.localScale.y / 2.0f);
-
-        Vector2 v = this.transform.position - collision.transform.position;
-
-        if (v.y > 0)
-            ++this.groundContacts;
-        else
-            this.groundContacts = 0;
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (this.groundContacts > 0)
-            --this.groundContacts;
-    }
+    
+    private int jumpFactor = 40;
 
     void FixedUpdate()
     {
-        //Store the current horizontal input in the float moveHorizontal.
-        float moveHorizontal = Input.GetAxis("Horizontal");
-
-        //Store the current vertical input in the float moveVertical.
-        // wenn boden berührt
-
-        if (this.groundContacts > 0)
-            moveVertical = Input.GetAxis("Vertical");
+        if (Input.GetKey("space"))
+        {
+            Vector3 v = getVectorOfTheNearestCube();
+            
+            if (v.x != 0 && v.y != 0)
+            {
+                if (v.y < 0 && Math.Abs(v.y) > Math.Abs(v.x) && v.y < v.x)
+                    rb2d.AddForce(new Vector2(0, jumpFactor) * speed);
+                else if (v.x < 0 && Math.Abs(v.y) < Math.Abs(v.x) && v.y > v.x)
+                    rb2d.AddForce(new Vector2(jumpFactor, 0) * speed);
+                else if (v.x > 0 && Math.Abs(v.y) < Math.Abs(v.x) && v.y < v.x)
+                    rb2d.AddForce(new Vector2(-jumpFactor, 0) * speed);
+                else if (v.y > 0 && Math.Abs(v.y) > Math.Abs(v.x) && v.y > v.x)
+                    rb2d.AddForce(new Vector2(0, -jumpFactor) * speed);
+            }
+        }
         else
-            moveVertical = 0;
+        {
+            float moveHorizontal = Input.GetAxis("Horizontal");
+            if (!collisionWithWall())
+                moveHorizontal /= 4;
+            Vector2 movement = new Vector2(moveHorizontal, 0);
+            rb2d.AddForce(movement * speed);
+        }
+    }
 
-        //Use the two store floats to create a new Vector2 variable movement.
-        Vector2 movement = new Vector2(moveHorizontal, moveVertical * 10);
+    private bool collisionWithWall()
+    {
+        Collider2D[] result = new Collider2D[10];
+        ContactFilter2D filter = new ContactFilter2D();
+        if (collider.OverlapCollider(filter, result) > 0)
+            return true;
+        else
+            return false;
+    }
 
-        //Call the AddForce function of our Rigidbody2D rb2d supplying movement multiplied by speed to move our player.
-        rb2d.AddForce(movement * speed);
+    private Vector3 getVectorOfTheNearestCube()
+    {
+        Collider2D[] result = new Collider2D[10];
+        ContactFilter2D filter = new ContactFilter2D();
+        int count = collider.OverlapCollider(filter, result);
+        Vector3 nearest = new Vector3(0, 0, 0);
+
+        if (count > 0)
+        {
+            foreach(Collider2D collider in result)
+            {
+                if (collider != null)
+                {
+                    if (nearest.x == 0 && nearest.y == 0)
+                        nearest = collider.transform.position;
+                    else if (Vector3.Distance(this.transform.position, nearest) < Vector3.Distance(this.transform.position, collider.transform.position))
+                        nearest = collider.transform.position;
+                }
+            }
+            return nearest - this.transform.position;
+        }
+        else
+        {
+            return new Vector3();
+        }
     }
 }
