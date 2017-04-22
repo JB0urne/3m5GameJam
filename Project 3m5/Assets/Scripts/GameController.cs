@@ -22,11 +22,11 @@ public class GameController : MonoBehaviour {
 		}; 
 	}
 
-	void ADDhealth (int amount) {
+	public void ADDhealth (int amount) {
 		health += amount;
 	}
 
-	void SUBhealth (int amount) {
+	public void SUBhealth (int amount) {
 		health -= amount;
 	}
 }
