@@ -120,9 +120,34 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\AnimationImporter\Editor\AnimationAssetPostProcessor.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\AnimationImportJob.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\AnimationImporter.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\AnimationImporterWindow.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\Aseprite\AsepriteImporter.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\Config\AnimationImporterSharedConfig.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\Config\AnimationImporterSharedConfigEditor.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\Config\AnimationTargetObjectType.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\Config\AssetTargetLocation.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\Config\AssetTargetLocationType.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\Config\ImportAnimatorController.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\Config\PreviousImportSettings.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\Config\SpriteNaming.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\IAnimationImporterPlugin.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\ImportedData\ImportedAnimation.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\ImportedData\ImportedAnimationFrame.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\ImportedData\ImportedAnimationSheet.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\PyxelEdit\PyxelEditData.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\PyxelEdit\PyxelEditImporter.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\Utilities\AnimationClipUtility.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\Utilities\AssetDatabaseUtility.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\Utilities\JSONObject.cs" />
+    <Compile Include="Assets\AnimationImporter\Editor\Utilities\ScriptableObjectUtility.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Editor\TutorialInfoEditor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\AnimationImporter\Editor\PyxelEdit\Ionic.Zip.dll-readme.txt" />
+    <None Include="Assets\AnimationImporter\readme.txt" />
     <None Include="Assets\TutorialInfo\Fonts\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
