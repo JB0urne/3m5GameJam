@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitController : MonoBehaviour {
-    
+public class UnitController : MonoBehaviour
+{
+
+    private readonly float sqrt2 = (float)Math.Sqrt(2);
 	private Rigidbody2D rb2d;       //Store a reference to the Rigidbody2D component required to use 2D Physics.
     private CircleCollider2D collider;
     public float speed = 10.0F;				//Floating point variable to store the player's movement speed.
+    public float jumpStrength = 40;
+    public float wallJumpMultiplier = 0.8F;
+
     public float moveVertical;
     
     public int groundContacts;
@@ -23,24 +28,24 @@ public class UnitController : MonoBehaviour {
 	void Update () {
     }
     
-    private int jumpFactor = 40;
 
     void FixedUpdate()
     {
-        if (Input.GetKey("space"))
+        if (Input.GetKeyDown("space"))
+//        if (Input.GetKey("space"))
         {
             Vector3 v = getVectorOfTheNearestCube();
             
             if (v.x != 0 && v.y != 0)
             {
                 if (v.y < 0 && Math.Abs(v.y) > Math.Abs(v.x) && v.y < v.x)
-                    rb2d.AddForce(new Vector2(0, jumpFactor) * speed);
+                    rb2d.AddForce(new Vector2(0, jumpStrength) * speed);
                 else if (v.x < 0 && Math.Abs(v.y) < Math.Abs(v.x) && v.y > v.x)
-                    rb2d.AddForce(new Vector2(jumpFactor, 0) * speed);
+                    rb2d.AddForce(new Vector2(jumpStrength / sqrt2 * wallJumpMultiplier, jumpStrength / sqrt2 * wallJumpMultiplier) * speed);
                 else if (v.x > 0 && Math.Abs(v.y) < Math.Abs(v.x) && v.y < v.x)
-                    rb2d.AddForce(new Vector2(-jumpFactor, 0) * speed);
+                    rb2d.AddForce(new Vector2(-jumpStrength / sqrt2 * wallJumpMultiplier, jumpStrength / sqrt2 * wallJumpMultiplier) * speed);
                 else if (v.y > 0 && Math.Abs(v.y) > Math.Abs(v.x) && v.y > v.x)
-                    rb2d.AddForce(new Vector2(0, -jumpFactor) * speed);
+                    rb2d.AddForce(new Vector2(0, -jumpStrength) * speed);
             }
         }
         else
