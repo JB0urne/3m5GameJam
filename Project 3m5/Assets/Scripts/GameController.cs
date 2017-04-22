@@ -15,11 +15,12 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (healthbar.value<=0) {
+		if (health > 10) {
+			health--;
+		} else {
 			//gameover
-		} {
-			healthbar.value -= 1;
-		}; 
+		}
+		healthbar.value = health;
 	}
 
 	public void ADDhealth (int amount) {
