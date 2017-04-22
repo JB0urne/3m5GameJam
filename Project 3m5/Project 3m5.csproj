@@ -79,6 +79,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\CameraScript.cs" />
+    <Compile Include="Assets\PlayerJumpController.cs" />
+    <Compile Include="Assets\Scripts\GameController.cs" />
+    <Compile Include="Assets\Scripts\PickUpController.cs" />
     <Compile Include="Assets\Scripts\UnitController.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\TutorialInfo.cs" />
     <Compile Include="Assets\_Completed-Assets\Scripts\CompleteCameraController.cs" />
@@ -86,6 +89,8 @@
     <Compile Include="Assets\_Completed-Assets\Scripts\CompleteRotator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\AnimationImporter\Editor\PyxelEdit\Ionic.Zip.dll-readme.txt" />
+    <None Include="Assets\AnimationImporter\readme.txt" />
     <None Include="Assets\TutorialInfo\Fonts\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
