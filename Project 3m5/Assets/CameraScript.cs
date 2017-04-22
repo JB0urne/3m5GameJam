@@ -15,11 +15,20 @@ public class CameraScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        if (Input.GetKeyDown("space"))
+        if (Input.GetKey("space"))
+        {
             print("space key was pressed");
+            playerMoveUp();
+        }
 
         this.followPlayer();
 	}
+
+    private void playerMoveUp()
+    {        
+        playerPosition.transform.Translate(Vector3.left * Time.deltaTime);
+        playerPosition.transform.Translate(Vector3.up * Time.deltaTime, Space.World);
+    }
 
     private void followPlayer()
     {
