@@ -9,23 +9,21 @@ public class UnitController : MonoBehaviour
     private const float TOLERANCE = 0.01f;
     private readonly float sqrt2 = (float)Math.Sqrt(2);
 
-    private Rigidbody2D rb2d;       //Store a reference to the Rigidbody2D component required to use 2D Physics.
+    private Rigidbody2D body;       //Store a reference to the Rigidbody2D component required to use 2D Physics.
     private CircleCollider2D collider;
     private bool SpaceIsDown = false;
-    public float speed = 10.0f;				//Floating point variable to store the player's movement speed.
-    public float airSpeedMultiplier = 0.5f;
-    public float jumpStrength = 40;
-    public float wallJumpMultiplier = 0.8f;
-    public float jumpTouchDistanceTolerance = 0.05f;
-
-    public float moveVertical;
-    
-    public int groundContacts;
+    public float LinearMovementSpeed = 10.0f;
+    public float AngularMovementSpeed = 10.0f;
+    public float AirLinearSpeedMultiplier = 0.5f;
+    public float AirAngularSpeedMultiplier = 0.5f;
+    public float JumpStrength = 40;
+    public float WallJumpStrengthMultiplier = 0.8f;
+    public float JumpTouchDistanceTolerance = 0.05f;
 
     // Use this for initialization
     void Start ()
     {
-        rb2d = GetComponent<Rigidbody2D>();
+        body = GetComponent<Rigidbody2D>();
         collider = GetComponent<CircleCollider2D>();
     }
 	
@@ -46,9 +44,14 @@ public class UnitController : MonoBehaviour
             SpaceIsDown = false;
             if (vNullable.HasValue)
             {
+                float diagonal = JumpStrength / sqrt2 * WallJumpStrengthMultiplier;
                 Vector3 v = vNullable.Value;
                 if (v.y < 0 && Math.Abs(v.y) > Math.Abs(v.x) && v.y < v.x)
-                    rb2d.AddForce(new Vector2(0, jumpStrength) * speed);
+                {
+                    // jump up
+                    killVelocityY();
+                    body.AddForce(new Vector2(0, JumpStrength));
+                }
                 else if (v.x < 0 && Math.Abs(v.y) < Math.Abs(v.x) && v.y > v.x)
                 {
                     // jump right
@@ -64,20 +67,40 @@ public class UnitController : MonoBehaviour
                     body.AddForce(new Vector2(-diagonal, diagonal));
                 }
                 else if (v.y > 0 && Math.Abs(v.y) > Math.Abs(v.x) && v.y > v.x)
-                    rb2d.AddForce(new Vector2(0, -jumpStrength) * speed);
+                {
+                    // jump down
+                    killVelocityY();
+                    body.AddForce(new Vector2(0, -JumpStrength));
+                }
             }
         }
         // move
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        if (!vNullable.HasValue) moveHorizontal *= airSpeedMultiplier;
-        Vector2 movement = new Vector2(moveHorizontal, 0);
-        rb2d.AddForce(movement);
-        rb2d.AddTorque(-moveHorizontal);
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float linear = horizontalInput * LinearMovementSpeed;
+        float angular = horizontalInput * AngularMovementSpeed;
+        if (!vNullable.HasValue)
+        {
+            linear *= AirLinearSpeedMultiplier;
+            angular *= AirAngularSpeedMultiplier;
+        }
+        Vector2 movement = new Vector2(linear, 0);
+        body.AddForce(movement);
+        body.AddTorque(-angular);
         // damage walls
         foreach(GameObject wall in touchingWalls)
         {
             wall.GetComponent<WallController>().DealDamageWithTouch(Time.fixedDeltaTime);
         }
+    }
+
+    private void killVelocityX()
+    {
+        body.velocity.Set(0f, body.velocity.y);
+    }
+
+    private void killVelocityY()
+    {
+        body.velocity.Set(body.velocity.x, 0f);
     }
 
     private bool CollisionWithWall()
@@ -109,11 +132,11 @@ public class UnitController : MonoBehaviour
             if (alignsHorizontally || alignsVertically)
             {
                 float d = (alignsHorizontally ? dx - wallSize.x : dy - wallSize.y) - playerRadius;
-                if (d <= jumpTouchDistanceTolerance && d < nearestDistance)
+                if (d <= JumpTouchDistanceTolerance && d < nearestDistance)
                 {
                     touchingWalls.Add(wall);
                 }
-                if (d <= jumpTouchDistanceTolerance && (!foundVertical || alignsVertically || d < nearestDistance))
+                if (d <= JumpTouchDistanceTolerance && (!foundVertical || alignsVertically || d < nearestDistance))
                 {
                     foundVertical |= alignsVertically;
                     nearestDistance = d;
