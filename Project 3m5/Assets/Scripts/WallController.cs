@@ -7,8 +7,8 @@ public class WallController : MonoBehaviour {
 	public float maxChunkHealth = 100.0f;
 	public float chunkHealth;
 
-    public float TouchHealtchLossPerSecond = 1f;
-    public float MaxPickupHealthLoss = 30f;
+    public float TouchHealthLossPerSecond = 1f;
+    public float MaxPickupHealthLoss = 40f;
 
 	// Use this for initialization
 	void Start () {
@@ -31,7 +31,7 @@ public class WallController : MonoBehaviour {
 
     public void DealDamageWithTouch(float touchTimeInSeconds)
     {
-        chunkHealth -= TouchHealtchLossPerSecond * touchTimeInSeconds;
+        chunkHealth -= TouchHealthLossPerSecond * touchTimeInSeconds;
     }
 
     public void DealDamageWithPickup(float damageMultiplier)

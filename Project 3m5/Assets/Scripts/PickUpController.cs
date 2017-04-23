@@ -19,7 +19,7 @@ public class PickUpController : MonoBehaviour {
 			if (Input.GetKeyDown ("a")) playerInput += "a";
 			if (Input.GetKeyDown ("s")) playerInput += "s";
 			if (Input.GetKeyDown ("d")) playerInput += "d";
-			if (playerInput.Equals ("asd"))
+			if (playerInput.Contains ("asd"))
 				consumePickup ();
 		}
 	}
@@ -50,12 +50,9 @@ public class PickUpController : MonoBehaviour {
 		foreach (var ele in wallElems) {
 			WallController elemContr = ele.GetComponent<WallController>();
 			float distance = Vector3.Distance(pickUpObject.transform.position, ele.transform.position);
-			if (distance < 1.8f) {
-				elemContr.decHealth(40.0f);
-			} else if (distance < 3.0f) {
-				elemContr.decHealth(25.0f);
-			} else if (distance < 4.5f) {
-				elemContr.decHealth(10.0f);
+			if (distance <= 5.0f) {
+				float damageMultiplier = 1.0f - (distance * 0.2f);
+				elemContr.DealDamageWithPickup (damageMultiplier);
 			}
 		}
 	}
