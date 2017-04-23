@@ -24,14 +24,14 @@ public class CameraScript : MonoBehaviour {
 
     private void followPlayer()
     {
-        //old camera movement pattern
+        //old camera movement pattern	
 		//Vector3 v = new Vector3(playerPosition.transform.position.x, playerPosition.transform.position.y, -10);
         //transform.position = v;
 
 		//new camera movement pattern
 		float x = Mathf.Abs(this.transform.position.x - nextCameraPosition.x);
 		float y = Mathf.Abs(this.transform.position.y - nextCameraPosition.y);
-		moveSpeed = Mathf.Max (x, y);
+		moveSpeed = Mathf.Max (x, y) /4*3;
 			
 			this.transform.position = Vector3.Lerp(this.transform.position, nextCameraPosition, Time.deltaTime * moveSpeed);
 		//transform.position = nextCameraPosition + new Vector3(0,0,-10);
