@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class WallController : MonoBehaviour {
 
-	public int maxChunkHealth = 50;
-	public int chunkHealth;
+	public float maxChunkHealth = 100.0f;
+	public float chunkHealth;
 
 	// Use this for initialization
 	void Start () {
@@ -14,15 +14,15 @@ public class WallController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		float colorChannel = (chunkHealth/(float)maxChunkHealth);
+		float colorChannel = (chunkHealth/maxChunkHealth);
 		this.GetComponentInParent<SpriteRenderer>().color = new Color(colorChannel, colorChannel, colorChannel);
 	}
 
-	public void incHealth(int amount) {
+	public void incHealth(float amount) {
 		chunkHealth += amount;
 	}
 
-	public void decHealth(int amount) {
+	public void decHealth(float amount) {
 		chunkHealth -= amount;
 	}
 }

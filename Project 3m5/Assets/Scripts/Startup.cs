@@ -15,7 +15,10 @@ public class Startup : MonoBehaviour
         var player = GameObject.Find("Player");
 	    var controller = Instantiate(GameManagerPrefab);
 	    var ui = Instantiate(UiCanvasPrefab);
-        player.GetComponent<PickUpController>().gameController = controller;
+		GameObject[] pickUpElems = GameObject.FindGameObjectsWithTag("PickUp");
+		foreach (var pickup in pickUpElems) {
+			pickup.GetComponent<PickUpController>().gameController = controller;
+		}
         controller.healthbar = ui.GetComponentInChildren<Slider>();
 	}
 	
