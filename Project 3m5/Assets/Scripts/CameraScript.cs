@@ -7,7 +7,7 @@ public class CameraScript : MonoBehaviour {
     public GameObject playerPosition;
 	private Vector3 movementDirection;
 	private Vector3 nextCameraPosition;
-	private float moveSpeed;
+	public float moveSpeed;
 
 	// Use this for initialization
 	void Start ()
@@ -16,7 +16,7 @@ public class CameraScript : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
     {
         this.followPlayer();
 		nextCameraPosition = playerPosition.transform.position + new Vector3(0,0,-10);
@@ -32,8 +32,15 @@ public class CameraScript : MonoBehaviour {
 		float x = Mathf.Abs(this.transform.position.x - nextCameraPosition.x);
 		float y = Mathf.Abs(this.transform.position.y - nextCameraPosition.y);
 		moveSpeed = Mathf.Max (x, y) /4*3;
-			
+		if (moveSpeed > 3.5) {
+			moveSpeed = moveSpeed*5;
+		}
+
+
+		if (moveSpeed > 4) {
+			this.transform.position = nextCameraPosition;
+		} {
 			this.transform.position = Vector3.Lerp(this.transform.position, nextCameraPosition, Time.deltaTime * moveSpeed);
-		//transform.position = nextCameraPosition + new Vector3(0,0,-10);
+		}
     }
 }
