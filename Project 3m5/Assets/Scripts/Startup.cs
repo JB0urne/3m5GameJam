@@ -19,7 +19,9 @@ public class Startup : MonoBehaviour
 			pickup.GetComponent<PickUpController>().gameController = controller;
 		}
         controller.healthbar = ui.GetComponentInChildren<Slider>();
-	}
+	    controller.scoreText = ui.GetComponentsInChildren<Text>()[0];
+        controller.timeText = ui.GetComponentsInChildren<Text>()[1];
+    }
 	
 	// Update is called once per frame
 	void Update () {
