@@ -38,13 +38,15 @@ public class UnitController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector3? vNullable = getVectorOfTheNearestCubeWithoutCollision();
+        List<GameObject> touchingWalls;
+        Vector3? vNullable = GetVectorOfTheNearestCubeWithoutCollision(out touchingWalls);
+        // jump
         if (SpaceIsDown)
         {
             SpaceIsDown = false;
             if (vNullable.HasValue)
             {
-                var v = vNullable.Value;
+                Vector3 v = vNullable.Value;
                 if (v.y < 0 && Math.Abs(v.y) > Math.Abs(v.x) && v.y < v.x)
                     rb2d.AddForce(new Vector2(0, jumpStrength) * speed);
                 else if (v.x < 0 && Math.Abs(v.y) < Math.Abs(v.x) && v.y > v.x)
@@ -55,17 +57,20 @@ public class UnitController : MonoBehaviour
                     rb2d.AddForce(new Vector2(0, -jumpStrength) * speed);
             }
         }
-        else
+        // move
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        if (!vNullable.HasValue) moveHorizontal *= airSpeedMultiplier;
+        Vector2 movement = new Vector2(moveHorizontal, 0);
+        rb2d.AddForce(movement);
+        rb2d.AddTorque(-moveHorizontal);
+        // damage walls
+        foreach(GameObject wall in touchingWalls)
         {
-            float moveHorizontal = Input.GetAxis("Horizontal");
-            if (!vNullable.HasValue) moveHorizontal *= airSpeedMultiplier;
-            Vector2 movement = new Vector2(moveHorizontal, 0);
-            rb2d.AddForce(movement);
-            rb2d.AddTorque(-moveHorizontal);
+            wall.GetComponent<WallController>().DealDamageWithTouch(Time.fixedDeltaTime);
         }
     }
 
-    private bool collisionWithWall()
+    private bool CollisionWithWall()
     {
         Collider2D[] result = new Collider2D[10];
         ContactFilter2D filter = new ContactFilter2D();
@@ -75,8 +80,9 @@ public class UnitController : MonoBehaviour
             return false;
     }
 
-    private Vector3? getVectorOfTheNearestCubeWithoutCollision()
+    private Vector3? GetVectorOfTheNearestCubeWithoutCollision(out List<GameObject> touchingWalls)
     {
+        touchingWalls = new List<GameObject>();
         GameObject[] walls = GameObject.FindGameObjectsWithTag("Wall");
         Vector3? answer = null;
         float playerRadius = GetComponentInParent<CircleCollider2D>().radius;
@@ -93,6 +99,10 @@ public class UnitController : MonoBehaviour
             if (alignsHorizontally || alignsVertically)
             {
                 float d = (alignsHorizontally ? dx - wallSize.x : dy - wallSize.y) - playerRadius;
+                if (d <= jumpTouchDistanceTolerance && d < nearestDistance)
+                {
+                    touchingWalls.Add(wall);
+                }
                 if (d <= jumpTouchDistanceTolerance && (!foundVertical || alignsVertically || d < nearestDistance))
                 {
                     foundVertical |= alignsVertically;
@@ -104,7 +114,7 @@ public class UnitController : MonoBehaviour
         return answer;
     }
 
-    private Vector3 getVectorOfTheNearestCube()
+    private Vector3 GetVectorOfTheNearestCube()
     {
         Collider2D[] result = new Collider2D[10];
         ContactFilter2D filter = new ContactFilter2D();

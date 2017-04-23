@@ -12,7 +12,6 @@ public class Startup : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-        var player = GameObject.Find("Player");
 	    var controller = Instantiate(GameManagerPrefab);
 	    var ui = Instantiate(UiCanvasPrefab);
 		GameObject[] pickUpElems = GameObject.FindGameObjectsWithTag("PickUp");
