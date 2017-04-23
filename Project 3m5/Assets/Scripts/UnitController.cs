@@ -60,7 +60,8 @@ public class UnitController : MonoBehaviour
             float moveHorizontal = Input.GetAxis("Horizontal");
             if (!vNullable.HasValue) moveHorizontal *= airSpeedMultiplier;
             Vector2 movement = new Vector2(moveHorizontal, 0);
-            rb2d.AddForce(movement * speed);
+            rb2d.AddForce(movement);
+            rb2d.AddTorque(-moveHorizontal);
         }
     }
 
