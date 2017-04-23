@@ -5,29 +5,43 @@ using UnityEngine;
 public class PickUpController : MonoBehaviour {
 
 	public GameController gameController;
-	private bool isOnMetochondrion;
+	public bool playerIsHere;
+	public string playerInput;
 
 	void Start () {
-		isOnMetochondrion = false;
+		playerIsHere = false;
+		playerInput = "";
 	}
 
 	void Update () {
-		//if (isOnMetochondrion && Input.GetKeyDown ("w")) ;
+		if (playerIsHere) {
+			if (Input.GetKeyDown ("w")) playerInput += "w";
+			if (Input.GetKeyDown ("a")) playerInput += "a";
+			if (Input.GetKeyDown ("s")) playerInput += "s";
+			if (Input.GetKeyDown ("d")) playerInput += "d";
+			if (playerInput.Equals ("asd"))
+				consumePickup ();
+		}
+	}
+
+	void consumePickup() {
+		this.gameObject.SetActive(false);
+		damageNearWallElements(this.gameObject);
+		gameController.ADDhealth(50);
+		//TODO: add points
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
-		//Check the provided Collider2D parameter other to see if it is tagged "PickUp", if it is...
 		if (other.gameObject.CompareTag ("Player")) 
 		{
-			//... then set the other object we just collided with to inactive.
-			this.gameObject.SetActive(false);
+			playerIsHere = true;			
+		}
+	}
 
-			damageNearWallElements(other.gameObject);
-
-			//Add one to the current value of our count variable.
-			gameController.ADDhealth(50);
-
-			//add points?
+	void OnTriggerExit2D(Collider2D other) {
+		if (other.gameObject.CompareTag ("Player")) {
+			playerIsHere = false;
+			playerInput = "";
 		}
 	}
 
