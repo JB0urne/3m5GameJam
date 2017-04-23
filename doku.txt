@@ -1,3 +1,11 @@
-GAME JAM bei 3m5 April 2017
+=GAME JAM bei 3m5 vom 21.-23. April 2017
 
-Keywords: Gewebetod, heruntertropfen, Urstoff
+==Keywords
+Gewebetod, heruntertropfen, Urstoff
+
+==Umgang mit den Projektdateien
+Das Projekt wurde mit Unity erstellt. Das fertige Programm im Ordner "Final" ist
+eigenständig und ohne die Unity-Dateien ausführbar. Um das Projekt mit Unity
+bearbeiten zu können, öffnen im Start-Dialog den Ordner "Project 3m5".
+
+==Spielanleitung
