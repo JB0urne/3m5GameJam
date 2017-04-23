@@ -8,15 +8,14 @@ public class PickUpController : MonoBehaviour {
 	public bool playerIsHere;
 	public string playerInput;
 	public string consumeCode;
-	public int anzahlKeys;
 
 	void Start () {
 		playerIsHere = false;
 		playerInput = "";
-		anzahlKeys = Random.Range(2, 5);
 		int randomKey; 
-		consumeCode = "";
-		for (int i=0; i<anzahlKeys; i++) {
+		consumeCode = "asd";
+		/*
+		for (int i=0; i<3; i++) {
 			randomKey = Random.Range(0, 4);
 			if (randomKey == 0) {
 				consumeCode += "w";
@@ -28,7 +27,22 @@ public class PickUpController : MonoBehaviour {
 				consumeCode += "d";
 			}
 		}
+		*/
+		/*
+		for (var j=0; j<3; j++) {
+			felder[] = GetElements("anzeigefeld");
+			if (consumeCode [j] == "w")
+				felder[0].Sprite = arrowUpSprite;
+			if (consumeCode [j] == "a")
+				feld [j].Sprite = arrowLeftSprite;
+			if (consumeCode [j] == "s")
+				feld [j].Sprite = arrowDownSprite;
+			if (consumeCode [j] == "d")
+				feld [j].Sprite = arrowRightSprite;
+		}
+		*/
 	}
+	
 
 	void Update () {
 		if (playerIsHere) {
