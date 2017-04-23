@@ -30,9 +30,14 @@ public class GameController : MonoBehaviour {
 	private float timer = 0.0f;
 	private int seconds;
 
+    public static string finalScoreText;
+    public static string finalTimeText;
+
     public void onDeath()
     {
         Debug.Log("dead");
+        finalScoreText = scoreText.text;
+        finalTimeText = timeText.text;
         SceneManager.LoadScene("GameOverScene");
     }
 
@@ -59,7 +64,7 @@ public class GameController : MonoBehaviour {
 		//update time
 		timer += Time.deltaTime;
 		seconds = (int) timer;
-		timeText.text = seconds.ToString();
+	    timeText.text = "TIME: " + seconds;
 
 		SetScoreText ();
 	}
@@ -84,7 +89,8 @@ public class GameController : MonoBehaviour {
 		score -= amount;
 	}
 
-	public void SetScoreText () {
-		scoreText.text = (seconds*scorePerSecond + score).ToString();
+	public void SetScoreText ()
+	{
+	    scoreText.text = "SCORE: " + (seconds * scorePerSecond + score).ToString();
 	}
 }
