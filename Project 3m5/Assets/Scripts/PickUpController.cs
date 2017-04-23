@@ -7,10 +7,27 @@ public class PickUpController : MonoBehaviour {
 	public GameController gameController;
 	public bool playerIsHere;
 	public string playerInput;
+	public string consumeCode;
+	public int anzahlKeys;
 
 	void Start () {
 		playerIsHere = false;
 		playerInput = "";
+		anzahlKeys = Random.Range(2, 5);
+		int randomKey; 
+		consumeCode = "";
+		for (int i=0; i<anzahlKeys; i++) {
+			randomKey = Random.Range(0, 4);
+			if (randomKey == 0) {
+				consumeCode += "w";
+			} else if (randomKey == 1) {
+				consumeCode += "a";
+			} else if (randomKey == 2) {
+				consumeCode += "s";
+			} else if (randomKey == 3) {
+				consumeCode += "d";
+			}
+		}
 	}
 
 	void Update () {
@@ -19,7 +36,7 @@ public class PickUpController : MonoBehaviour {
 			if (Input.GetKeyDown ("a")) playerInput += "a";
 			if (Input.GetKeyDown ("s")) playerInput += "s";
 			if (Input.GetKeyDown ("d")) playerInput += "d";
-			if (playerInput.Contains ("asd"))
+			if (playerInput.Contains (consumeCode))
 				consumePickup ();
 		}
 	}
@@ -28,13 +45,13 @@ public class PickUpController : MonoBehaviour {
 		this.gameObject.SetActive(false);
 		damageNearWallElements(this.gameObject);
 		gameController.ADDhealth(50);
-		//TODO: add points
+		gameController.GetComponent<GameController> ().ADDscorePickUp ();
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
 		if (other.gameObject.CompareTag ("Player")) 
 		{
-			playerIsHere = true;			
+			playerIsHere = true;
 		}
 	}
 
