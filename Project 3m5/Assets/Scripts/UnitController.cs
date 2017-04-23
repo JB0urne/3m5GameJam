@@ -11,6 +11,7 @@ public class UnitController : MonoBehaviour
 
     private Rigidbody2D rb2d;       //Store a reference to the Rigidbody2D component required to use 2D Physics.
     private CircleCollider2D collider;
+    private bool SpaceIsDown = false;
     public float speed = 10.0f;				//Floating point variable to store the player's movement speed.
     public float airSpeedMultiplier = 0.5f;
     public float jumpStrength = 40;
@@ -29,30 +30,29 @@ public class UnitController : MonoBehaviour
     }
 	
 	// Update is called once per frame
-	void Update () {
-    }
+	void Update ()
+	{
+	    SpaceIsDown |= Input.GetKeyDown("space");
+	}
     
 
     void FixedUpdate()
     {
         Vector3? vNullable = getVectorOfTheNearestCubeWithoutCollision();
-        if (Input.GetKeyDown("space"))
-//        if (Input.GetKey("space"))
+        if (SpaceIsDown)
         {
+            SpaceIsDown = false;
             if (vNullable.HasValue)
             {
                 var v = vNullable.Value;
-                if (Math.Abs(v.x) > TOLERANCE && Math.Abs(v.y) > TOLERANCE)
-                {
-                    if (v.y < 0 && Math.Abs(v.y) > Math.Abs(v.x) && v.y < v.x)
-                        rb2d.AddForce(new Vector2(0, jumpStrength) * speed);
-                    else if (v.x < 0 && Math.Abs(v.y) < Math.Abs(v.x) && v.y > v.x)
-                        rb2d.AddForce(new Vector2(jumpStrength / sqrt2 * wallJumpMultiplier, jumpStrength / sqrt2 * wallJumpMultiplier) * speed);
-                    else if (v.x > 0 && Math.Abs(v.y) < Math.Abs(v.x) && v.y < v.x)
-                        rb2d.AddForce(new Vector2(-jumpStrength / sqrt2 * wallJumpMultiplier, jumpStrength / sqrt2 * wallJumpMultiplier) * speed);
-                    else if (v.y > 0 && Math.Abs(v.y) > Math.Abs(v.x) && v.y > v.x)
-                        rb2d.AddForce(new Vector2(0, -jumpStrength) * speed);
-                }
+                if (v.y < 0 && Math.Abs(v.y) > Math.Abs(v.x) && v.y < v.x)
+                    rb2d.AddForce(new Vector2(0, jumpStrength) * speed);
+                else if (v.x < 0 && Math.Abs(v.y) < Math.Abs(v.x) && v.y > v.x)
+                    rb2d.AddForce(new Vector2(jumpStrength / sqrt2 * wallJumpMultiplier, jumpStrength / sqrt2 * wallJumpMultiplier) * speed);
+                else if (v.x > 0 && Math.Abs(v.y) < Math.Abs(v.x) && v.y < v.x)
+                    rb2d.AddForce(new Vector2(-jumpStrength / sqrt2 * wallJumpMultiplier, jumpStrength / sqrt2 * wallJumpMultiplier) * speed);
+                else if (v.y > 0 && Math.Abs(v.y) > Math.Abs(v.x) && v.y > v.x)
+                    rb2d.AddForce(new Vector2(0, -jumpStrength) * speed);
             }
         }
         else
