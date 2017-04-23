@@ -1,12 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
-	public int health = 500;
-	public int ScorePerPickUp = 50;
+	public int StartHealth = 500;
+
+    public int health
+    {
+        get { return _health; }
+        set
+        {
+            _health = value;
+            if (_health <= 0) onDeath();
+        }
+    }
+
+    private int _health = 500;
+    public GameObject Player;
+    public int ScorePerPickUp = 50;
 	public int ScorePerBlock = 10;
 	public int scorePerSecond = 5;
 	public Slider healthbar;
@@ -16,9 +30,16 @@ public class GameController : MonoBehaviour {
 	private float timer = 0.0f;
 	private int seconds;
 
+    public void onDeath()
+    {
+        Debug.Log("dead");
+        SceneManager.LoadScene("GameOverScene");
+    }
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+	{
+	    health = StartHealth;
 		healthbar.value = health;	
 		healthbar.maxValue = health;
 		score = 0;
@@ -28,9 +49,11 @@ public class GameController : MonoBehaviour {
 	void Update () {
 		if (health > 0) {
 			health--;
-		} else {
-			//gameover
 		}
+	    if (health > 0 && Player.transform.position.y < 0)
+	    {
+	        health = 0;
+	    }
 		healthbar.value = health;
 
 		//update time
