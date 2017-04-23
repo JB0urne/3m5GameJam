@@ -59,19 +59,24 @@ public class WallController : MonoBehaviour {
     public float destroyStep3Min = 0.5f;
     public float destroyStep3Max = 4.0f;
 
+    private bool isDestroyed = false;
     public void destroy()
     {
-        Vector3 oldPosition = transform.position;
-        Vector3 newScale = new Vector2(0.4f, 0.4f);
-
-        int count = (int)Random.Range(4.0f, 8f);
-
-        for (int i = 0; i < count; ++i)
+        if (isDestroyed == false)
         {
-            GameObject obj = cloneNewAndSmaller(this.gameObject, newScale);
-            StartCoroutine(destroySetp2In(obj, Random.Range(destroyStep1Min, destroyStep1Max)));
+            isDestroyed = true;
+            Vector3 oldPosition = transform.position;
+            Vector3 newScale = new Vector2(0.4f, 0.4f);
+
+            int count = (int)Random.Range(4.0f, 8f);
+
+            for (int i = 0; i < count; ++i)
+            {
+                GameObject obj = cloneNewAndSmaller(this.gameObject, newScale);
+                StartCoroutine(destroySetp2In(obj, Random.Range(destroyStep1Min, destroyStep1Max)));
+            }
+            transform.localScale = new Vector2(0.0f, 0.0f);
         }
-        transform.localScale = new Vector2(0.0f, 0.0f);
     }
 
     private IEnumerator destroySetp2In(GameObject obj, float seconds)
