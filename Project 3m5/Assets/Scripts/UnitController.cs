@@ -56,12 +56,14 @@ public class UnitController : MonoBehaviour
                 {
                     // jump right
                     killVelocityX();
+                    body.angularVelocity *= -1f;
                     body.AddForce(new Vector2(diagonal, diagonal));
                 }
                 else if (v.x > 0 && Math.Abs(v.y) < Math.Abs(v.x) && v.y < v.x)
                 {
                     // jump left
                     killVelocityX();
+                    body.angularVelocity *= -1f;
                     body.AddForce(new Vector2(-diagonal, diagonal));
                 }
                 else if (v.y > 0 && Math.Abs(v.y) > Math.Abs(v.x) && v.y > v.x)
